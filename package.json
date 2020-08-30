@@ -8,7 +8,8 @@
     "type": "module",
     "scripts": {
         "eslint": "eslint --ignore-path .gitignore",
-        "serve": "yarn serve:$NODE_ENV",
+        "test": "NODE_ENV=development npx -n='--experimental-vm-modules -r envk' jest --notify",
+        "serve": "yarn serve:${NODE_ENV:-development}",
         "serve:development": "nodemon --harmony -r envk src/index.js --ignore app/ --ignore dist/",
         "serve:staging": "node --harmony -r envk src/index.js",
         "serve:production": "node --harmony -r envk src/index.js"
@@ -30,13 +31,14 @@
         "logj": "^2.1.1"
     },
     "devDependencies": {
-        "@babel/core": "^7.11.4",
-        "@babel/eslint-parser": "^7.11.4",
-        "@babel/preset-env": "^7.11.0",
+        "@babel/core": "^7.11.6",
+        "@babel/eslint-parser": "^7.11.5",
+        "@babel/preset-env": "^7.11.5",
         "core-js": "^3.6.5",
-        "eslint": "^7.7.0",
-        "eslint-plugin-jasmine": "^4.1.1",
-        "jasmine": "^3.6.1",
+        "eslint": "^7.10.0",
+        "eslint-plugin-jest": "^24.0.2",
+        "jest": "^26.4.2",
+        "jest-environment-node": "^26.3.0",
         "nodemon": "^2.0.4"
     }
 }
