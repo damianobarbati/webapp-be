@@ -1,42 +1,39 @@
 {
-    "name": "webapp-be",
-    "version": "1.0.0",
-    "description": "Back-end starter kit for web applications",
-    "license": "UNLICENSED",
-    "author": "Damiano Barbati <damiano.barbati@gmail.com> (http://github.com/damianobarbati)",
-    "repository": "https://github.com/damianobarbati/webapp-be",
-    "type": "module",
-    "scripts": {
-        "eslint": "eslint --ignore-path .gitignore",
-        "serve": "yarn serve:$NODE_ENV",
-        "serve:development": "nodemon --harmony -r envk src/index.js --ignore app/ --ignore dist/",
-        "serve:staging": "node --harmony -r envk src/index.js",
-        "serve:production": "node --harmony -r envk src/index.js"
-    },
-    "dependencies": {
-        "@koa/cors": "^3.1.0",
-        "envk": "^2.0.1",
-        "jwt-simple": "^0.5.6",
-        "kcors": "^2.2.2",
-        "koa": "^2.13.0",
-        "koa-basic-auth": "^4.0.0",
-        "koa-better-json": "^2.0.0",
-        "koa-better-log": "^1.0.5",
-        "koa-body": "^4.2.0",
-        "koa-compress": "^5.0.1",
-        "koa-no-trailing-slash": "^2.1.0",
-        "koa-router": "^9.4.0",
-        "koa-send": "^5.0.1",
-        "logj": "^2.1.1"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.11.4",
-        "@babel/eslint-parser": "^7.11.4",
-        "@babel/preset-env": "^7.11.0",
-        "core-js": "^3.6.5",
-        "eslint": "^7.7.0",
-        "eslint-plugin-jasmine": "^4.1.1",
-        "jasmine": "^3.6.1",
-        "nodemon": "^2.0.4"
-    }
+  "name": "webapp-be",
+  "version": "1.0.0",
+  "description": "Back-end starter kit for web applications",
+  "license": "UNLICENSED",
+  "author": "Damiano Barbati <damiano.barbati@gmail.com> (http://github.com/damianobarbati)",
+  "repository": "https://github.com/damianobarbati/webapp-be",
+  "type": "module",
+  "scripts": {
+    "eslint": "eslint --ignore-path .gitignore --fix",
+    "jest": "NODE_ENV=development NODE_OPTIONS='--experimental-vm-modules -r envk' jest --runInBand --no-cache",
+    "serve": "yarn serve:${NODE_ENV:-development}",
+    "serve:development": "NODE_ENV=development nodemon -r envk src/index.js --ignore app/ --ignore dist/",
+    "serve:staging": "NODE_ENV=staging node -r envk src/index.js",
+    "serve:production": "NODE_ENV=production node -r envk src/index.js"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "envk": "^3.0.2",
+    "jwt-simple": "^0.5.6",
+    "kcors": "^2.2.2",
+    "koa": "^2.13.4",
+    "koa-basic-auth": "^4.0.0",
+    "koa-better-json": "^2.3.0",
+    "koa-better-log": "^1.0.5",
+    "koa-body": "^4.2.0",
+    "koa-compress": "^5.1.0",
+    "koa-no-trailing-slash": "^2.1.0",
+    "koa-router": "^10.1.1",
+    "koa-send": "^5.0.1",
+    "logj": "^2.1.1"
+  },
+  "devDependencies": {
+    "eslint-config-translated": "^1.0.25",
+    "jest": "^27.4.5",
+    "jest-environment-node": "^27.4.4",
+    "nodemon": "^2.0.15"
+  }
 }

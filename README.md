@@ -2,47 +2,61 @@
 
 A webapp starter-kit leveraging the best technologies available until 2021 and embracing the KISS principle.  
 
-Stack:
-- nodejs v14
-- postgres v13
-- docker v19
-
-## Requirements
-- node v12: `brew install nvm && nvm install 12 && nvm use 12`
-- docker v19, docker-compose v1.24: `brew cask install docker`
-
 ## Development
-Start environment for full-stack development:
-```bash
+
+Start development environment:
+```sh
+nvm install
 yarn install
-NODE_ENV=development yarn docker:compose --build db
-NODE_ENV=development yarn serve
+yarn serve
 ```
 
-Access api at: <http://localhost/api/namespace/endpoint>.  
-
-Access database with: 
-```bash
-PGUSER=root PGPASSWORD=root psql -h 127.0.0.1 webapp
+Before running any command listed down here:
+```sh
+export $(cat .env.development | grep -v "^#" | xargs)
 ```
 
-To have full staging or production environment locally:
-```bash
-NODE_ENV=staging IMAGE=webapp PGUSER=root PGPASSWORD=root PGDATABASE=webapp docker-compose up
+Start database:
+```sh
+docker run --name box696-db --restart=always -d -e POSTGRES_USER=${PGUSER:?} -e POSTGRES_PASSWORD=${PGPASSWORD:?} -e POSTGRES_DB=${PGDATABASE:?} -p 5432:5432 postgres:13-alpine
+```
+
+Import db:
+```sh
+docker run --rm -it -e PGPASSWORD='box696!' postgres:13-alpine pg_dump --clean -h box696.app -U root box696 > dump.sql # schema and data
+docker run --rm -it -e PGPASSWORD='box696!' postgres:13-alpine pg_dump --column-inserts -h box696.app -U root box696 > dump.sql # only data
+cat dump.sql | docker exec -i -e PGPASSWORD='box696!' box696-db psql -U root box696
+```
+
+Development db:
+```sh
+pgcli -h 127.0.0.1 box696 -uroot
+```
+
+Production db:
+```sh
+PGPASSWORD='box696!' pgcli -h box696.app box696 -uroot
+```
+
+Query from CLI to local db:
+```sh
+export FINGERPRINT=a40c828b
+docker exec -ti -e PGPASSWORD=$PGPASSWORD box696-db psql -h 127.0.0.1 box696 root -c "select 1"
 ```
 
 ## Deployment
 
-CI deployments are powered by GitHub actions.  
-Configure CentOS v7 droplets for staging/production following: <https://gist.github.com/damianobarbati/e299a8a006b357b118fae1d8a12c9c88>.
+Deploy image:
+```sh
+sh deploy.sh
+```
 
-Generate a deploy key (customize the keypair and secret name accordingly to environment):
-- generate a RSA keypair on server: `ssh-keygen -t rsa -b 4096 -q -P "" -C staging.damianobarbati.com`
-- allow public key to login: `cat ~/.ssh/id_rsa.pub >> authorized_keys`
-- add private key content `cat ~/.ssh/id_rsa` into repository secrets with label `staging_pem` 
-
-"docker:test": "DOCKER_BUILDKIT=1 docker build --tag $npm_package_name --force-rm --build-arg NODE_ENV=production .",
-"docker:build": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build --compress --force-rm --no-cache --pull",
-"docker:push": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose push",
-"docker:pull": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose pull",
-"docker:compose": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --force-recreate --always-recreate-deps --renew-anon-volumes --remove-orphans"
+Start database (one time setup):
+```sh
+docker rm -f box696-db
+rm -rf /var/lib/postgresql/data
+mkdir -p /var/lib/postgresql/data
+chmod -R 0777 ./database
+docker rm -f box696-db
+env $(cat .env.development | grep -v "^#" | xargs) docker run --name box696-db --restart=always -d -e POSTGRES_USER=${PGUSER:?} -e POSTGRES_PASSWORD=${PGPASSWORD:?} -e POSTGRES_DB=${PGDATABASE:?} -v $(pwd)/database:/docker-entrypoint-initdb.d -v /var/lib/postgresql/data:/var/lib/postgresql/data -p 5432:5432 postgres:13-alpine
+```

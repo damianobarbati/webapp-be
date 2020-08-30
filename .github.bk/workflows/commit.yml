@@ -1,29 +1,31 @@
-name: tag
+name: commit
 
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - '**'
+    branches:
+      - 'master'
 
 jobs:
-  deploy-production:
+  deploy-staging:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
       - name: build and deploy
         env:
-          ENV: production
-          HOST: my-production-host.com
-          PEM: ${{secrets.PEM_PRODUCTION}}
-          DOCKERHUB_USER: damianobarbati
+          ENV: staging
+          HOST: my-staging-host.com
+          PEM: ${{secrets.PEM_STAGING}}
+          DOCKERHUB_USER: ${{secrets.DOCKERHUB_USER}}
           DOCKERHUB_TOKEN: ${{secrets.DOCKERHUB_TOKEN}}
         run: |
           eval `ssh-agent -s`
           ssh-add - <<< "$PEM"
           mkdir ~/.ssh
-          ssh-keyscan -p 22 -H "$HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
           docker login docker.io --username "$DOCKERHUB_USER" --password "$DOCKERHUB_TOKEN"
           sh deploy.sh "$ENV"
