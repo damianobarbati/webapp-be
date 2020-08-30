@@ -1,44 +1,52 @@
 import http from 'http';
 import koa from 'koa';
 import cors from '@koa/cors';
-import compress from 'koa-compress';
 import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
 import json from 'koa-better-json';
 import log from 'koa-better-log';
-import Router from 'koa-router';
-import * as api from './api.js';
+import nanoid from 'nano-id';
+import asyncStorage from './asyncStorage.js';
+import router from './router.js';
 
-const app = new koa();
-const router = Router();
+const app = new koa({ proxy: true });
 
 app.use(cors({ exposeHeaders: ['x-api-version'] }));
 app.use(noTrailingSlash());
 app.use(body());
-app.use(compress({ filter: content_type => ['application/json'].includes(content_type) }));
-app.use(log({
-    logWith: ctx => ({ fingerprint: ctx.request.query.fingerprint }),
-    exclude: ctx => ctx.path.includes('healthcheck'),
-}));
+app.use(
+  log({
+    exclude: (ctx) => ctx.path.endsWith('healthcheck'),
+  })
+);
 app.use(json());
 
 app.use(async (ctx, next) => {
-    try {
-        ctx.set({ 'x-version': process.env.npm_package_version });
-        await next();
+  try {
+    const id_transaction = nanoid(10);
+    ctx.set({ 'x-version': process.env.npm_package_version, 'x-transaction-id': id_transaction });
+    const store = { id_transaction };
+    await asyncStorage.run(store, next);
+  } catch (error) {
+    // if error was not properly handled do no leak the error to client but log the stacktrace
+    if (!error.http_code) {
+      console.error(error);
+      ctx.status = error.http_code || 500;
+      ctx.body = 'Internal server error.';
+    } else {
+      ctx.set({ 'Content-type': 'application/json; charset=utf-8' });
+      ctx.status = error.http_code;
+      ctx.body = error.message;
     }
-    catch (error) {
-        ctx.status = error.http_code || 500; // eslint-disable-line
-        ctx.body = error.message || 'Internal server error.'; // eslint-disable-line
-    }
-});
-
-router.all(`/api/:service/:action`, async ctx => {
-    const { service, action } = ctx.params;
-    const args = { ...ctx.request.query, ...ctx.request.body };
-    ctx.body = await api[service][action](args);
+  }
 });
 
 app.use(router.routes());
+app.use(router.allowedMethods());
 
-http.createServer(app.callback()).listen(process.env.PORT, error => error ? console.error(error) : console.info(`http serving on port ${process.env.PORT}`));
+const server = http.createServer(app.callback());
+
+if (process.env.NODE_ENV !== 'test')
+  server.listen(process.env.PORT, (error) => (error ? console.error(error) : console.info(`Listening on port ${process.env.PORT}`)));
+
+export default server;

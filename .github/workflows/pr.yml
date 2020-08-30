@@ -1,0 +1,20 @@
+name: pr
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        run: |
+          IMAGE=$(jq -r .name package.json):$(jq -r .version package.json)
+          DOCKER_BUILDKIT=1 docker build --force-rm --no-cache --network=host --tag "$IMAGE" .
