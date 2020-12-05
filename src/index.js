@@ -1,5 +1,5 @@
 import http from 'http';
-import { AsyncLocalStorage } from 'async_hooks';
+import asyncStorage from './asyncStorage.js';
 import koa from 'koa';
 import cors from '@koa/cors';
 import compress from 'koa-compress';
@@ -12,7 +12,6 @@ import * as controllers from './controllers/index.js';
 
 const app = new koa();
 const router = Router();
-export const asyncStorage = new AsyncLocalStorage();
 
 app.use(cors({ exposeHeaders: ['x-src-version'] }));
 app.use(noTrailingSlash());

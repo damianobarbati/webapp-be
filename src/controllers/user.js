@@ -1,10 +1,9 @@
-import { asyncStorage } from '../index.js';
+import asyncStorage from '../asyncStorage.js';
 import jwt from 'jwt-simple';
 import { validate } from '../models/index.js';
 
 export const signUp = async ({ email, password }) => {
-    // await asyncStorageExample();
-
+    await asyncStorageExample();
     validate({ email, password }, ['email', 'password']);
 
     const user = { email, password };

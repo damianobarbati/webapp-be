@@ -21,6 +21,7 @@ NODE_ENV=development yarn serve
 
 Routes defined in `src/index.js`:
 ```bash
+curl -v -k http://localhost/api/user/signUp -d "email=$RANDOM@gmail.com" -d 'password=p4ssw0rd'
 curl -v -k http://localhost/api/user/success -d 'hello=world'
 curl -v -k http://localhost/api/user/failure
 ```

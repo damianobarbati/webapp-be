@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals';
-
-console.log(expect);
-
 import { signUp } from './user.js';
+import asyncStorage from '../asyncStorage.js';
+
+asyncStorage.getStore = jest.fn(() => ({ args: { hello: 'world' } }));
 
 test('sign-up', async () => {
     const result = await signUp({ email: 'john.doe@gmail.com', password: 'p455w0rd' });
