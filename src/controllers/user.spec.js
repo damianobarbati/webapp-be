@@ -1,3 +1,7 @@
+import { jest } from '@jest/globals';
+
+console.log(expect);
+
 import { signUp } from './user.js';
 
 test('sign-up', async () => {

@@ -1,6 +1,6 @@
 # webapp-be
 
-A webapp starter-kit leveraging the best technologies available until 2021 and embracing the KISS principle.  
+A webapp starter-kit leveraging the best technologies available in 2021 and embracing the KISS principle.  
 
 Stack:
 - nodejs v14
@@ -8,8 +8,8 @@ Stack:
 - docker v19
 
 ## Requirements
-- node v12: `brew install nvm && nvm install 12 && nvm use 12`
-- docker v19, docker-compose v1.24: `brew cask install docker`
+- node: `brew install nvm && nvm install < .nvmrc && nvm use < .nvmrc`
+- docker, docker-compose: `brew cask install docker`
 
 ## Development
 Start environment for full-stack development:
@@ -19,7 +19,11 @@ NODE_ENV=development yarn docker:compose --build db
 NODE_ENV=development yarn serve
 ```
 
-Access api at: <http://localhost/api/namespace/endpoint>.  
+Routes defined in `src/index.js`:
+```bash
+curl -v -k http://localhost/api/user/success -d 'hello=world'
+curl -v -k http://localhost/api/user/failure
+```
 
 Access database with: 
 ```bash
@@ -39,10 +43,4 @@ Configure CentOS v7 droplets for staging/production following: <https://gist.git
 Generate a deploy key (customize the keypair and secret name accordingly to environment):
 - generate a RSA keypair on server: `ssh-keygen -t rsa -b 4096 -q -P "" -C staging.damianobarbati.com`
 - allow public key to login: `cat ~/.ssh/id_rsa.pub >> authorized_keys`
-- add private key content `cat ~/.ssh/id_rsa` into repository secrets with label `staging_pem` 
-
-"docker:test": "DOCKER_BUILDKIT=1 docker build --tag $npm_package_name --force-rm --build-arg NODE_ENV=production .",
-"docker:build": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose build --compress --force-rm --no-cache --pull",
-"docker:push": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose push",
-"docker:pull": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose pull",
-"docker:compose": "NAME=$npm_package_name VERSION=$npm_package_version env `cat .env.$NODE_ENV` COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --force-recreate --always-recreate-deps --renew-anon-volumes --remove-orphans"
+- add private key content `cat ~/.ssh/id_rsa` into repository secrets with label `staging_pem`

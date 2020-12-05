@@ -43,20 +43,20 @@ export const getUploadURL = async ({ key, isPublic = false, metadata }) => {
     return url;
 };
 /* test without metadata
-UPLOAD_URL=`curl -k -s 'https://localhost/api/media/getUploadURL' -d 'isPublic=1' -d 'key=test.txt' | jq -r .`
+UPLOAD_URL=`curl -k -s 'http://localhost/api/media/getUploadURL' -d 'isPublic=1' -d 'key=test.txt' | jq -r .`
 curl -X PUT "$UPLOAD_URL" -H 'x-amz-acl: public-read' -H 'Content-type: text/plain' --upload-file ./snippets/test.txt
-open `curl -k 'https://localhost/api/media/getDownloadURL' -d 'key=test.txt' | jq -r .`
+open `curl -k 'http://localhost/api/media/getDownloadURL' -d 'key=test.txt' | jq -r .`
 open "https://damianobarbati-com.fra1.digitaloceanspaces.com/test.txt"
 */
 
 /* test with metadata
-UPLOAD_URL=`curl -k -s 'https://localhost/api/media/getUploadURL' -H 'Content-type: application/json' -d '{"isPublic":1,"key":"test.mp4","metadata":{"duration":6}}' | jq -r .`
+UPLOAD_URL=`curl -k -s 'http://localhost/api/media/getUploadURL' -H 'Content-type: application/json' -d '{"isPublic":1,"key":"test.mp4","metadata":{"duration":6}}' | jq -r .`
 curl -X PUT "$UPLOAD_URL" -H 'x-amz-acl: public-read' -H 'x-amz-meta-duration: 6' -H 'Content-type: video/mp4' --upload-file ./snippets/test.mp4
-open `curl -k 'https://localhost/api/media/getDownloadURL' -d 'key=test.mp4' | jq -r .`
+open `curl -k 'http://localhost/api/media/getDownloadURL' -d 'key=test.mp4' | jq -r .`
 open "https://damianobarbati-com.fra1.digitaloceanspaces.com/test.mp4"
 */
 
-// UPLOAD_URL=`curl -k 'https://localhost/api/media/getUploadURL' -d 'isPublic=1' -d 'key=test.mp4'`
+// UPLOAD_URL=`curl -k 'http://localhost/api/media/getUploadURL' -d 'isPublic=1' -d 'key=test.mp4'`
 // curl -X PUT $UPLOAD_URL --upload-file ./assets/test.mp4
 // open https://irca-media.s3.eu-central-1.amazonaws.com/test.mp4
 
@@ -74,11 +74,11 @@ export const getDownloadURL = async ({ key }) => {
 
     return url;
 };
-// curl -k 'https://localhost/api/media/getDownloadURL' -d 'key=test.txt'
-// open `curl -k 'https://localhost/api/media/getDownloadURL' -d 'key=test.txt'`
+// curl -k 'http://localhost/api/media/getDownloadURL' -d 'key=test.txt'
+// open `curl -k 'http://localhost/api/media/getDownloadURL' -d 'key=test.txt'`
 
-// curl -k 'https://localhost/api/media/getDownloadURL' -d 'key=test.mp4'
-// open `curl -k 'https://localhost/api/media/getDownloadURL' -d 'key=test.mp4'`
+// curl -k 'http://localhost/api/media/getDownloadURL' -d 'key=test.mp4'
+// open `curl -k 'http://localhost/api/media/getDownloadURL' -d 'key=test.mp4'`
 
 export const getMetadata = async ({ url }) => {
     if (process.env.S3_ENDPOINT.includes('digitaloceanspaces.com')) {
@@ -97,4 +97,4 @@ export const getMetadata = async ({ url }) => {
         return Metadata;
     }
 };
-// curl -k 'https://localhost/api/media/getMetadata' -d 'url=https://damianobarbati-com.fra1.digitaloceanspaces.com/test.mp4'
+// curl -k 'http://localhost/api/media/getMetadata' -d 'url=https://damianobarbati-com.fra1.digitaloceanspaces.com/test.mp4'
