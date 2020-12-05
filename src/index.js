@@ -2,7 +2,6 @@ import http from 'http';
 import asyncStorage from './asyncStorage.js';
 import koa from 'koa';
 import cors from '@koa/cors';
-import compress from 'koa-compress';
 import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
 import json from 'koa-better-json';
@@ -16,7 +15,6 @@ const router = Router();
 app.use(cors({ exposeHeaders: ['x-src-version'] }));
 app.use(noTrailingSlash());
 app.use(body());
-app.use(compress({ filter: content_type => ['application/json'].includes(content_type) }));
 app.use(log({
     logWith: ctx => ({ fingerprint: ctx.request.query.fingerprint }),
     exclude: ctx => ctx.path.includes('healthcheck'),
