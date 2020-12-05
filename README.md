@@ -1,11 +1,6 @@
 # webapp-be
 
-A webapp starter-kit leveraging the best technologies available in 2021 and embracing the KISS principle.  
-
-Stack:
-- nodejs v14
-- postgres v13
-- docker v19
+A webapp backend starter-kit leveraging nodejs, postgres and docker.  
 
 ## Requirements
 - node: `brew install nvm && nvm install < .nvmrc && nvm use < .nvmrc`
