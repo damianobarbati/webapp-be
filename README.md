@@ -7,7 +7,8 @@ A webapp backend starter-kit leveraging nodejs, postgres and docker.
 - docker, docker-compose: `brew cask install docker`
 
 ## Development
-Start environment for full-stack development:
+
+Start development environment:
 ```bash
 yarn install
 NODE_ENV=development yarn docker:compose --build db
