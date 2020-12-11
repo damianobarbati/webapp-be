@@ -42,4 +42,6 @@ router.all(`/api/user/failure`, async ctx => ctx.body = await controllers.user.f
 
 app.use(router.routes());
 
-http.createServer(app.callback()).listen(process.env.PORT, error => error ? console.error(error) : console.info(`http serving on port ${process.env.PORT}`));
+const webServer = http.createServer(app.callback()).listen(process.env.PORT, error => error ? console.error(error) : console.info(`http serving on port ${process.env.PORT}`));
+
+export default webServer;

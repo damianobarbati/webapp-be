@@ -6,6 +6,9 @@
     "author": "Damiano Barbati <damiano.barbati@gmail.com> (http://github.com/damianobarbati)",
     "repository": "https://github.com/damianobarbati/webapp-be",
     "type": "module",
+    "engines": {
+        "node": "14.5.x"
+    },
     "scripts": {
         "eslint": "eslint --ignore-path .gitignore",
         "test": "NODE_ENV=development npx -n='--experimental-vm-modules -r envk' jest --notify",
