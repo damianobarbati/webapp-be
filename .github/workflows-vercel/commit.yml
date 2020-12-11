@@ -1,0 +1,16 @@
+name: commit
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: deploy
+        run: npx vercel --prod --env NODE_ENV=production
