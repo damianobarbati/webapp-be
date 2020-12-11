@@ -12,7 +12,7 @@ import * as controllers from './controllers/index.js';
 const app = new koa();
 const router = Router();
 
-app.use(cors({ exposeHeaders: ['x-src-version'] }));
+app.use(cors({ exposeHeaders: ['x-version'] }));
 app.use(noTrailingSlash());
 app.use(body());
 app.use(log({
@@ -33,12 +33,12 @@ app.use(async (ctx, next) => {
     }
 });
 
-/** user routes **/
-router.all(`/api/user/signUp`, async ctx => ctx.body = await controllers.user.signUp({ ...ctx.params, ...ctx.args }));
-router.all(`/api/user/signIn`, async ctx => ctx.body = await controllers.user.signIn({ ...ctx.params, ...ctx.args }));
+const routeToFunction = func => async ctx => ctx.body = await func(ctx.args);
 
-router.all(`/api/user/success`, async ctx => ctx.body = await controllers.user.success({ ...ctx.params, ...ctx.args }));
-router.all(`/api/user/failure`, async ctx => ctx.body = await controllers.user.failure({ ...ctx.params, ...ctx.args }));
+router.all(`/api/user/signUp`, routeToFunction(controllers.user.signUp));
+router.all(`/api/user/signIn`, routeToFunction(controllers.user.signIn));
+router.all(`/api/user/success`, routeToFunction(controllers.user.success));
+router.all(`/api/user/failure`, routeToFunction(controllers.user.failure));
 
 app.use(router.routes());
 
