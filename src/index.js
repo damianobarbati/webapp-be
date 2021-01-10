@@ -2,18 +2,16 @@ import http from 'http';
 import asyncStorage from './asyncStorage.js';
 import koa from 'koa';
 import cors from '@koa/cors';
-import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
 import json from 'koa-better-json';
 import log from 'koa-better-log';
-import Router from 'koa-router';
+import Router from '@koa/router';
 import * as controllers from './controllers/index.js';
 
 const app = new koa();
 const router = Router();
 
 app.use(cors({ exposeHeaders: ['x-version'] }));
-app.use(noTrailingSlash());
 app.use(body());
 app.use(log({
     logWith: ctx => ({ fingerprint: ctx.request.query.fingerprint }),
@@ -28,8 +26,9 @@ app.use(async (ctx, next) => {
         await asyncStorage.run(ctx, next);
     }
     catch (error) {
+        console.error(error);
         ctx.status = error.http_code || 500; // eslint-disable-line
-        ctx.body = error.message || 'Internal server error.'; // eslint-disable-line
+        ctx.body = error.http_message || 'Internal server error.'; // eslint-disable-line
     }
 });
 

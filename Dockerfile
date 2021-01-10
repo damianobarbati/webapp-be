@@ -9,7 +9,6 @@ RUN yarn install --production=false && \
     yarn audit && \
     yarn eslint . && \
     yarn test && \
-    yarn build && \
     yarn install --production && \
     yarn cache clean
 
