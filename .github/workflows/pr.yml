@@ -17,5 +17,4 @@ jobs:
       - name: build
         run: |
           IMAGE=$(jq -r .name package.json):$(jq -r .version package.json)
-          echo "::set-env name=IMAGE::$IMAGE"
           DOCKER_BUILDKIT=1 docker build --force-rm --no-cache --network=host --tag "$IMAGE" .
