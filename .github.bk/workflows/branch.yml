@@ -4,16 +4,23 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - 'master'
+      - main
 
 jobs:
-  test-build:
+  build:
     runs-on: ubuntu-20.04
     timeout-minutes: 5
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: build
+      - name: image name
         run: |
-          DOCKER_BUILDKIT=1 docker build --force-rm --no-cache --network=host --build-arg NODE_ENV=production .
+          IMAGE=$(jq -r .name package.json):$(jq -r .version package.json)
+          echo "::set-env name=IMAGE::$IMAGE"
+
+      - name: build
+        run: DOCKER_BUILDKIT=1 docker build --force-rm --no-cache --network=host -t $IMAGE .
+
+      - name: test
+        run: docker run --rm -ti $IMAGE yarn test

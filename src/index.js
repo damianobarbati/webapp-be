@@ -1,48 +1,50 @@
 import http from 'http';
 import koa from 'koa';
 import cors from '@koa/cors';
-import compress from 'koa-compress';
 import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
 import json from 'koa-better-json';
 import log from 'koa-better-log';
-import Router from 'koa-router';
+import nanoid from 'nano-id';
 import asyncStorage from './asyncStorage.js';
-import * as api from './api.js';
+import router, { VERSION_PREFIX } from './router.js';
 
-const app = new koa();
-const router = Router();
+const app = new koa({ proxy: true });
 
 app.use(cors({ exposeHeaders: ['x-api-version'] }));
 app.use(noTrailingSlash());
 app.use(body());
-app.use(compress({ filter: (content_type) => ['application/json'].includes(content_type) }));
 app.use(
   log({
-    logWith: (ctx) => ({ fingerprint: ctx.request.query.fingerprint }),
-    exclude: (ctx) => ctx.path.includes('healthcheck'),
+    exclude: (ctx) => ctx.path.endsWith('healthcheck'),
   })
 );
 app.use(json());
 
 app.use(async (ctx, next) => {
   try {
-    ctx.set({ 'x-version': process.env.npm_package_version });
-    await asyncStorage.run(ctx, next);
+    const id_transaction = nanoid(10);
+    ctx.set({ 'x-version': process.env.npm_package_version, 'x-transaction-id': id_transaction });
+    const store = { id_transaction };
+    await asyncStorage.run(store, next);
   } catch (error) {
-        ctx.status = error.http_code || 500; // eslint-disable-line
-        ctx.body = error.message || 'Internal server error.'; // eslint-disable-line
+    console.error(error);
+    ctx.status = error.http_code || 500;
+    ctx.body = error.http_code ? error.message : 'Internal server error.';
   }
 });
 
-router.all(`/api/:service/:action`, async (ctx) => {
-  const { service, action } = ctx.params;
-  const args = { ...ctx.request.query, ...ctx.request.body };
-  ctx.body = await api[service][action](args);
+// always redirect to proper prefix if landing here
+app.use(async (ctx, next) => {
+  if (ctx.path === '/') {
+    ctx.redirect(VERSION_PREFIX);
+    return;
+  }
+
+  await next();
 });
 
 app.use(router.routes());
+app.use(router.allowedMethods());
 
-http
-  .createServer(app.callback())
-  .listen(process.env.PORT, (error) => (error ? console.error(error) : console.info(`http serving on port ${process.env.PORT}`)));
+http.createServer(app.callback()).listen(process.env.PORT, (error) => (error ? console.error(error) : console.info(`listening on port ${process.env.PORT}`)));

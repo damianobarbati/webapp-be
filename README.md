@@ -1,62 +1,43 @@
 # webapp-be
 
-A webapp starter-kit leveraging the best technologies available until 2021 and embracing the KISS principle.  
+Starter kit for backend of web applications.
 
 ## Development
 
-Start development environment:
+Set variables in [.env](.env) file then start development environment:
 ```sh
 nvm install
 yarn install
 yarn serve
 ```
 
-Before running any command listed down here:
+**Development database**
+
+Load environment variables:
 ```sh
-export $(cat .env.development | grep -v "^#" | xargs)
+export $(cat .env | grep -v "^#" | xargs)
 ```
 
 Start database:
 ```sh
-docker run --name box696-db --restart=always -d -e POSTGRES_USER=${PGUSER:?} -e POSTGRES_PASSWORD=${PGPASSWORD:?} -e POSTGRES_DB=${PGDATABASE:?} -p 5432:5432 postgres:13-alpine
+docker run --name ${PG_DATABASE:?}-db \
+  --restart=always -d \
+  -e POSTGRES_USER=${PG_USER:?} \
+  -e POSTGRES_PASSWORD=${PG_PASSWORD:?} \
+  -e POSTGRES_DB=${PG_DATABASE:?} \
+  -e POSTGRES_OPTIONS="-c log_statement=all" \
+  -p 5432:5432 \
+  postgres:14-alpine
 ```
 
-Import db:
+Connect to database:
 ```sh
-docker run --rm -it -e PGPASSWORD='box696!' postgres:13-alpine pg_dump --clean -h box696.app -U root box696 > dump.sql # schema and data
-docker run --rm -it -e PGPASSWORD='box696!' postgres:13-alpine pg_dump --column-inserts -h box696.app -U root box696 > dump.sql # only data
-cat dump.sql | docker exec -i -e PGPASSWORD='box696!' box696-db psql -U root box696
-```
-
-Development db:
-```sh
-pgcli -h 127.0.0.1 box696 -uroot
-```
-
-Production db:
-```sh
-PGPASSWORD='box696!' pgcli -h box696.app box696 -uroot
-```
-
-Query from CLI to local db:
-```sh
-export FINGERPRINT=a40c828b
-docker exec -ti -e PGPASSWORD=$PGPASSWORD box696-db psql -h 127.0.0.1 box696 root -c "select 1"
+docker exec -ti ${PG_DATABASE:?}-db psql ${DB_URI:?}
 ```
 
 ## Deployment
 
-Deploy image:
-```sh
-sh deploy.sh
-```
-
-Start database (one time setup):
-```sh
-docker rm -f box696-db
-rm -rf /var/lib/postgresql/data
-mkdir -p /var/lib/postgresql/data
-chmod -R 0777 ./database
-docker rm -f box696-db
-env $(cat .env.development | grep -v "^#" | xargs) docker run --name box696-db --restart=always -d -e POSTGRES_USER=${PGUSER:?} -e POSTGRES_PASSWORD=${PGPASSWORD:?} -e POSTGRES_DB=${PGDATABASE:?} -v $(pwd)/database:/docker-entrypoint-initdb.d -v /var/lib/postgresql/data:/var/lib/postgresql/data -p 5432:5432 postgres:13-alpine
-```
+CI is powered by GitHub actions ([.github](.github) folder):
+- PR on `main` branch are tested but not deployed to any environment
+- commits on `main` branch are deployed to staging environment
+- tags on `main` branch are deployed to production environment
