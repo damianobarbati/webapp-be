@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "eslint": "eslint --ignore-path .gitignore --fix",
-    "test": "",
+    "test": "NODE_ENV=development NODE_OPTIONS='--loader=quibble -r envk' yarn jesm src/**/*.spec.js",
     "serve": "yarn serve:${NODE_ENV:-development}",
     "serve:development": "NODE_ENV=development nodemon -r envk src/index.js",
     "serve:staging": "NODE_ENV=staging node -r envk src/index.js",
@@ -24,10 +24,13 @@
     "koa-better-log": "^1.0.5",
     "koa-body": "^4.2.0",
     "koa-no-trailing-slash": "^2.1.0",
-    "nano-id": "^1.1.0"
+    "nano-id": "^1.1.0",
+    "pg-database": "^2.0.3"
   },
   "devDependencies": {
-    "eslint-config-xs": "^1.1.0",
-    "nodemon": "^2.0.15"
+    "eslint-config-xs": "^1.1.1",
+    "jesm": "^0.0.15",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   }
 }

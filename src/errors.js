@@ -18,7 +18,7 @@ export class HTTP400 extends HTTP_Error {
 
 export class HTTP401 extends HTTP_Error {
   constructor(message = 'Unauthorized.') {
-    super(message, 400);
+    super(message, 401);
   }
 }
 

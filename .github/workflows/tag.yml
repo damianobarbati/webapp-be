@@ -1,13 +1,15 @@
-name: commit
+name: tag
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    tags:
+      - '**'
 
 jobs:
-  deploy-staging:
+  deploy-production:
+    if: ${{ false }}  # disable for now
+
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -16,9 +18,9 @@ jobs:
 
       - name: build and deploy
         env:
-          ENV: staging
-          HOST: my-staging-host.com
-          PEM: ${{secrets.PEM_STAGING}}
+          ENV: production
+          HOST: my-production-host.com
+          PEM: ${{secrets.PEM_PRODUCTION}}
           DOCKERHUB_USER: ${{secrets.DOCKERHUB_USER}}
           DOCKERHUB_TOKEN: ${{secrets.DOCKERHUB_TOKEN}}
         run: |

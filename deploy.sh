@@ -11,11 +11,6 @@ export NAME=$(jq -r .name package.json)
 export VERSION=$(jq -r .version package.json)
 export HASH=$(git rev-parse --short HEAD)
 export DOCKERHUB_NS=$(jq -r .dockerhub_namespace package.json)
-export DOCKER_HOST_STAGING=$(jq -r .docker_host_staging package.json)
-export DOCKER_HOST_PRODUCTION=$(jq -r .docker_host_production package.json)
-
-ssh-keyscan -p 22 -H "$DOCKER_HOST_STAGING" >> ~/.ssh/known_hosts
-ssh-keyscan -p 22 -H "$DOCKER_HOST_PRODUCTION" >> ~/.ssh/known_hosts
 
 if [ -z "$SKIP_BUILD" ]; then
     DOCKER_BUILDKIT=1 docker build --force-rm --no-cache --tag "$NAME" .
