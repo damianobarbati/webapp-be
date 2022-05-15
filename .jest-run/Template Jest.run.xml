@@ -1,9 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="true" type="JavaScriptTestRunnerJest">
     <node-interpreter value="project" />
-    <node-options value="--loader=quibble -r envk" />
-    <jest-package value="$PROJECT_DIR$/node_modules/jesm" />
-    <working-dir value="$PROJECT_DIR$" />
+    <node-options value="--experimental-vm-modules -r envk" />
+    <working-dir value="" />
     <envs>
       <env name="NODE_ENV" value="test" />
       <env name="npm_package_name" value="webapp-be" />

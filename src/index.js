@@ -46,7 +46,6 @@ app.use(router.allowedMethods());
 
 const server = http.createServer(app.callback());
 
-if (process.env.NODE_ENV !== 'test')
-  server.listen(process.env.PORT, (error) => (error ? console.error(error) : console.info(`Listening on port ${process.env.PORT}`)));
+if (process.env.NODE_ENV !== 'test') server.listen(process.env.PORT, () => console.info(`Listening on port ${process.env.PORT}`));
 
 export default server;

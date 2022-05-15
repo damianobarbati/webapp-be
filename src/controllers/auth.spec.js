@@ -1,15 +1,10 @@
+import { jest } from '@jest/globals';
 import supertest from 'supertest';
-import { describe, it, beforeAll, afterAll, mockModule } from 'jesm';
-import expect from 'expect';
 import server from '../index.js';
 import { VERSION_PREFIX } from '../router.js';
 
 describe('auth', () => {
-  let request;
-
-  beforeAll(async () => {
-    request = supertest.agent(server);
-  });
+  const request = supertest.agent(server);
 
   afterAll(async () => {
     server.close();
@@ -49,14 +44,14 @@ describe('auth', () => {
 });
 
 describe('auth with mocked database', () => {
+  const request = supertest.agent(server);
+
   it('/sign-up success', async () => {
-    await mockModule('../models/user.js', undefined, {
+    jest.unstable_mockModule('../models/user.js', () => ({
       create: (args) => args,
-    });
+    }));
 
     const { default: server } = await import('../index.js');
-
-    const request = supertest.agent(server);
 
     const { body } = await request.post(`${VERSION_PREFIX}/auth/sign-up`).send({
       email: 'john.doe@gmail.com',
