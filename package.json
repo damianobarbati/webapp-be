@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.23.0",
-    "eslint-config-xs": "^1.2.0",
+    "eslint-config-xs": "^1.2.1",
     "jesm": "^0.0.15",
     "nodemon": "^2.0.16",
     "supertest": "^6.2.3"

@@ -15,7 +15,7 @@ yarn serve
 
 Load environment variables:
 ```sh
-export $(cat .env | grep -v "^#" | xargs)
+source .env
 ```
 
 Start database:
