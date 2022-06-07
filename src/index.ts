@@ -5,7 +5,7 @@ import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
 import json from 'koa-better-json';
 import accesslog from 'koa-accesslog';
-import nanoid from 'nano-id';
+import { nanoid } from 'nanoid';
 import asyncStorage from './asyncStorage.js';
 import router from './router.js';
 import HTTP_Error from './errors.js';
@@ -20,7 +20,7 @@ app.use(json());
 
 app.use(async (ctx: koa.Context, next) => {
   try {
-    const id_transaction: string = nanoid(10);
+    const id_transaction = nanoid(10);
     ctx.set({ 'x-version': process.env.npm_package_version, 'x-transaction-id': id_transaction });
     const store = { id_transaction };
     await asyncStorage.run(store, next);

@@ -1,4 +1,3 @@
-import { jest } from '@jest/globals';
 import supertest from 'supertest';
 import server from '../index.js';
 import { VERSION_PREFIX } from '../router.js';
@@ -6,11 +5,11 @@ import { VERSION_PREFIX } from '../router.js';
 describe('auth', () => {
   let request;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     request = supertest.agent(server);
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     server.close();
   });
 
