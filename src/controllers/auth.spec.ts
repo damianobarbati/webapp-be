@@ -1,9 +1,9 @@
-import supertest from 'supertest';
+import supertest, { SuperAgentTest } from 'supertest';
 import server from '../index.js';
 import { VERSION_PREFIX } from '../router.js';
 
 describe('auth', () => {
-  let request;
+  let request: SuperAgentTest;
 
   beforeAll(() => {
     request = supertest.agent(server);
@@ -14,27 +14,29 @@ describe('auth', () => {
   });
 
   it('/sign-in success', async () => {
-    const { body } = await request.post(`${VERSION_PREFIX}/auth/sign-in`).send({
+    const response = await request.post(`${VERSION_PREFIX}/auth/sign-in`).send({
       email: 'john.doe@gmail.com',
       password: 'password',
     });
 
-    expect(body).toMatchObject({ token: expect.any(String) });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    expect(response.body).toMatchObject({ token: expect.any(String) }); // NO WAY. any(classType: any): any;
   });
 
   it('/sign-in failure', async () => {
-    const { status, headers, body } = await request.post(`${VERSION_PREFIX}/auth/sign-in`).send({
+    const response = await request.post(`${VERSION_PREFIX}/auth/sign-in`).send({
       email: 'john.doe@gmail.com',
       password: 'blabla',
     });
 
-    expect(status).toEqual(401);
-    expect(headers['x-transaction-id']).toEqual(expect.any(String));
-    expect(body).toEqual('Unauthorized.');
+    expect(response.status).toEqual(401);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    expect(response.headers['x-transaction-id']).toEqual(expect.any(String)); // NO WAY. headers field is any in the type def.
+    expect(response.body).toEqual('Unauthorized.');
   });
 
   it('/me success', async () => {
-    const { body } = await request
+    const response = await request
       .get(`${VERSION_PREFIX}/auth/me`)
       .set(
         'x-token',
@@ -42,7 +44,7 @@ describe('auth', () => {
       )
       .send();
 
-    expect(body).toMatchObject({ email: 'john.doe@gmail.com' });
+    expect(response.body).toMatchObject({ email: 'john.doe@gmail.com' });
   });
 });
 
