@@ -5,7 +5,7 @@ import * as user from './controllers/auth.js';
 
 export const VERSION_PREFIX = '/v' + process.env.npm_package_version.split('.')[0];
 
-const router = Router({
+const router = new Router({
   prefix: VERSION_PREFIX,
 });
 
