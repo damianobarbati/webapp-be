@@ -4238,11 +4238,6 @@ koa-accesslog@^1.0.0:
   dependencies:
     moment "^2.26.0"
 
-koa-better-json@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/koa-better-json/-/koa-better-json-2.3.0.tgz#4ee4121c258c1287320569dc56183baa6470f926"
-  integrity sha512-QSJRhjdJaNcMiq9BJXFR/VPEXzhM09oPOKOPxhxr//O2psDLnyLs3pbRkp33I5slTyeGnUXDoC+YMBzaL/FK8Q==
-
 koa-better-log@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/koa-better-log/-/koa-better-log-1.0.5.tgz#f8df10b8f733af32a31f85f1cc2add766591352f"

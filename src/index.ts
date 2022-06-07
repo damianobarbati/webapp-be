@@ -3,7 +3,6 @@ import koa from 'koa';
 import cors from '@koa/cors';
 import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
-import json from 'koa-better-json';
 import accesslog from 'koa-accesslog';
 import { nanoid } from 'nanoid';
 import asyncStorage from './asyncStorage.js';
@@ -16,7 +15,6 @@ app.use(cors({ exposeHeaders: ['x-api-version'] }));
 app.use(noTrailingSlash());
 app.use(body());
 app.use(accesslog());
-app.use(json());
 
 app.use(async (ctx: koa.Context, next) => {
   try {
