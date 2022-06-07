@@ -1,8 +1,8 @@
 import supertest from 'supertest';
 import { describe, it, beforeAll, afterAll, mockModule } from 'jesm';
 import expect from 'expect';
-import server from '../index.js';
-import { VERSION_PREFIX } from '../router.js';
+import server from '../index.ts';
+import { VERSION_PREFIX } from '../router.ts';
 
 describe('auth', () => {
   let request;
@@ -50,11 +50,11 @@ describe('auth', () => {
 
 describe('auth with mocked database', () => {
   it('/sign-up success', async () => {
-    await mockModule('../models/user.js', undefined, {
+    await mockModule('../models/user.ts', undefined, {
       create: (args) => args,
     });
 
-    const { default: server } = await import('../index.js');
+    const { default: server } = await import('../index.ts');
 
     const request = supertest.agent(server);
 

@@ -7,32 +7,39 @@
   "repository": "https://github.com/damianobarbati/webapp-be",
   "type": "module",
   "exports": "./dist/index.js",
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "eslint": "eslint --ignore-path .gitignore --fix",
     "test": "NODE_ENV=development NODE_OPTIONS='--loader=quibble -r envk' yarn jesm src/**/*.spec.js",
-    "tstest": "NODE_ENV=development nodemon --watch './**/*.ts' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm -r envk' src/test.ts",
-    "serve": "yarn serve:${NODE_ENV:-development}",
-    "serve:development": "NODE_ENV=development nodemon -r envk src/index.js",
-    "serve:staging": "NODE_ENV=staging ts-node -r envk src/index.js",
-    "serve:production": "NODE_ENV=production ts-node -r envk src/index.js"
+    "serve": "NODE_ENV=development nodemon --watch './**/*.ts' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm -r envk' src/index.ts",
+    "serve:old": "yarn serve:${NODE_ENV:-development}",
+    "serve:development": "NODE_ENV=development nodemon -r envk src/index.ts",
+    "serve:staging": "NODE_ENV=staging ts-node -r envk src/index.ts",
+    "serve:production": "NODE_ENV=production ts-node -r envk src/index.ts"
   },
   "dependencies": {
     "@koa/cors": "^3.3.0",
     "@koa/router": "^10.1.1",
-    "envk": "^3.0.2",
+    "envk": "^3.2.0",
     "jwt-simple": "^0.5.6",
     "koa": "^2.13.4",
+    "koa-accesslog": "^1.0.0",
     "koa-better-json": "^2.3.0",
     "koa-better-log": "^1.0.5",
     "koa-body": "^5.0.0",
     "koa-no-trailing-slash": "^2.1.0",
     "nano-id": "^1.1.0",
     "pg-database": "^2.0.3",
-    "ts-node": "^10.7.0",
-    "typescript": "^4.6.4"
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@types/koa-bodyparser": "^4.3.7",
+    "@types/koa-router": "^7.4.4",
+    "@types/node": "^17.0.40",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
     "eslint-config-xs": "^1.2.1",
     "jesm": "^0.0.15",
     "nodemon": "^2.0.16",

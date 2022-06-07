@@ -1,10 +1,16 @@
 import asyncStorage from './asyncStorage.js';
 
-export class HTTP_Error extends Error {
-  constructor(message, http_code) {
+export default class HTTP_Error extends Error {
+  name: string;
+  message: string;
+  http_code: number;
+  id_transaction: string;
+  stack: string;
+
+  constructor(message: string, http_code: number) {
     super(message);
     Error.captureStackTrace(this, HTTP_Error);
-    this.name = this.constructor.name.replace('_Error', http_code);
+    this.name = this.constructor.name.replace('_Error', String(http_code));
     this.http_code = http_code;
     this.id_transaction = asyncStorage.getStore()?.id_transaction; // undefined if outside of http lifecycle
   }
