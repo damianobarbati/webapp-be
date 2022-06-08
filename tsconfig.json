@@ -3,7 +3,9 @@
     "module": "ES2020",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "baseUrl": ".",
     "rootDir": ".",
-    "outDir": "./dist"
-  }
+    "outDir": "./dist",
+  },
+  "exclude": ["./node_modules/*"]
 }

@@ -12,9 +12,9 @@ const router = new Router({
 
 router.all('/healthcheck', (ctx: Context) => (ctx.body = true));
 
-router.all('/auth/sign-up', async (ctx: Context) => (ctx.body = await user.signUp(ctx.request.body as signUp_input)));
+router.all('/auth/sign-up', async (ctx: Context) => (ctx.body = await user.signUp(<signUp_input>ctx.request.body)));
 
-router.all('/auth/sign-in', (ctx: Context) => (ctx.body = user.signIn(ctx.request.body as signIn_input)));
+router.all('/auth/sign-in', (ctx: Context) => (ctx.body = user.signIn(<signIn_input>ctx.request.body)));
 
 router.all('/auth/me', (ctx: Context) => {
   const token = <string>ctx.request.headers['x-token'];

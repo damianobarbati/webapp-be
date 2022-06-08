@@ -12,11 +12,9 @@ import HTTP_Error from './errors.js';
 const app = new koa({ proxy: true });
 
 app.use(cors({ exposeHeaders: ['x-api-version'] }));
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call
-app.use(noTrailingSlash()); // types missing
+app.use(noTrailingSlash()); // eslint-disable-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call
 app.use(body());
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call
-app.use(accesslog()); // types missing
+app.use(accesslog()); // eslint-disable-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call
 
 app.use(async (ctx: koa.Context, next) => {
   try {
