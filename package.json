@@ -10,6 +10,7 @@
   "engines": {
     "node": ">=16"
   },
+  "files": [],
   "scripts": {
     "eslint": "eslint --ignore-path .gitignore --fix",
     "test": "NODE_ENV=development NODE_OPTIONS='-r envk' jest ./src",
@@ -30,7 +31,7 @@
     "koa-body": "^5.0.0",
     "koa-no-trailing-slash": "^2.1.0",
     "nanoid": "4.0.0",
-    "pg-database": "^2.0.3",
+    "pg-database": "^2.1.0",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
   },
@@ -43,10 +44,9 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "eslint-config-xs": "^1.2.1",
-    "jesm": "^0.0.15",
+    "jest": "^28.1.1",
     "nodemon": "^2.0.16",
     "supertest": "^6.2.3",
     "ts-jest": "^28.0.4"
-  },
-  "files": []
+  }
 }
