@@ -4,6 +4,7 @@ export default {
   transform: {
     '\\.[jt]sx?$': 'ts-jest',
   },
+  transformIgnorePatterns: [],
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
   globals: {

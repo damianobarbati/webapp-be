@@ -6,5 +6,6 @@
     "baseUrl": ".",
     "rootDir": ".",
     "outDir": "./dist",
+    "allowJs": true
   }
 }
