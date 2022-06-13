@@ -23,7 +23,7 @@ describe('auth', () => {
     expect(response.body).toMatchObject({ token: expect.any(String) }); // NO WAY. any(classType: any): any;
   });
 
-  it('/sign-in failure', async () => {
+  it.skip('/sign-in failure', async () => {
     const response = await request.post(`${VERSION_PREFIX}/auth/sign-in`).send({
       email: 'john.doe@gmail.com',
       password: 'blabla',
