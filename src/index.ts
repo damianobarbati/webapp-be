@@ -4,7 +4,7 @@ import cors from '@koa/cors';
 import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
 import accesslog from 'koa-accesslog';
-import { nanoid } from 'nanoid';
+import nanoid from 'nanoid';
 import asyncStorage from './asyncStorage.js';
 import router from './router.js';
 import HTTP_Error from './errors.js';
