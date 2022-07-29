@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "module": "ES2020",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "baseUrl": ".",
     "rootDir": ".",
