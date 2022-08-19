@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
 <configuration default="true" type="JavaScriptTestRunnerJest">
   <node-interpreter value="project" />
-  <node-options value="--experimental-vm-modules -r envk" />
+  <node-options value="-r envk" />
   <working-dir value="$PROJECT_DIR$" />
   <envs>
     <env name="NODE_ENV" value="test" />
