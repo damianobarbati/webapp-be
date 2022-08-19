@@ -2,6 +2,7 @@
   "extends": [
     "eslint-config-xs/node-ts"
   ],
+  "ignorePatterns": ["**/*.js"],
   "rules": {
     "node/no-missing-import": "off"
   }
