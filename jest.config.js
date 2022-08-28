@@ -1,6 +1,6 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 export default {
-  testMatch: ['**/?(*.)+(spec|test).ts'],
+  testMatch: ['**/?(*.)+(spec|test).(js|ts)'],
   transform: {
     '\\.[jt]sx?$': 'ts-jest',
   },
