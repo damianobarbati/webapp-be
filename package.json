@@ -6,32 +6,45 @@
   "author": "Damiano Barbati <damiano.barbati@gmail.com> (https://github.com/damianobarbati)",
   "repository": "https://github.com/damianobarbati/webapp-be",
   "type": "module",
+  "exports": "./dist/index.js",
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [],
   "scripts": {
     "eslint": "eslint --ignore-path .gitignore --fix",
-    "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules -r envk' jest --runInBand --no-cache",
+    "test": "NODE_ENV=development NODE_OPTIONS='-r envk' jest ./src",
     "serve": "yarn serve:${NODE_ENV:-development}",
-    "serve:development": "NODE_ENV=development nodemon -r envk src/index.js",
-    "serve:staging": "NODE_ENV=staging ts-node -r envk src/index.js",
-    "serve:production": "NODE_ENV=production ts-node -r envk src/index.js"
+    "serve:development": "NODE_ENV=development nodemon --watch './**/*.ts' --exec 'node --experimental-specifier-resolution=node --loader ts-node/esm -r envk' src/index.ts",
+    "serve:staging": "NODE_ENV=staging node --experimental-specifier-resolution=node --loader ts-node/esm -r envk src/index.ts",
+    "serve:production": "NODE_ENV=production node --experimental-specifier-resolution=node --loader ts-node/esm -r envk src/index.ts"
   },
   "dependencies": {
-    "@koa/cors": "^3.3.0",
-    "@koa/router": "^10.1.1",
-    "envk": "^3.2.0",
+    "@koa/cors": "^3.4.1",
+    "@koa/router": "^12.0.0",
+    "envk": "^3.2.1",
     "jwt-simple": "^0.5.6",
     "koa": "^2.13.4",
-    "koa-better-json": "^2.3.0",
+    "koa-accesslog": "^1.0.0",
     "koa-better-log": "^1.0.5",
     "koa-body": "^5.0.0",
     "koa-no-trailing-slash": "^2.1.0",
-    "nano-id": "^1.1.0",
-    "pg-database": "^2.1.0"
+    "nanoid": "4.0.0",
+    "pg-database": "^2.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.2"
   },
   "devDependencies": {
-    "eslint-config-xs": "^1.2.1",
-    "jesm": "^0.0.15",
-    "jest": "^28.1.1",
-    "nodemon": "^2.0.16",
-    "supertest": "^6.2.3"
+    "@types/jest": "^28.1.8",
+    "@types/koa-bodyparser": "^4.3.7",
+    "@types/koa__cors": "^3.3.0",
+    "@types/koa__router": "^8.0.11",
+    "@types/node": "^18.7.13",
+    "@types/supertest": "^2.0.12",
+    "eslint-config-xs": "^1.4.1",
+    "jest": "^29.0.1",
+    "nodemon": "^2.0.19",
+    "supertest": "^6.2.4",
+    "ts-jest": "^28.0.8"
   }
 }

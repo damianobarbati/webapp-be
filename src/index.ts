@@ -3,40 +3,37 @@ import koa from 'koa';
 import cors from '@koa/cors';
 import noTrailingSlash from 'koa-no-trailing-slash';
 import body from 'koa-body';
-import json from 'koa-better-json';
-import log from 'koa-better-log';
-import nanoid from 'nano-id';
+import accesslog from 'koa-accesslog';
+import { nanoid } from 'nanoid';
 import asyncStorage from './asyncStorage.js';
 import router from './router.js';
+import HTTP_Error from './errors.js';
 
 const app = new koa({ proxy: true });
 
 app.use(cors({ exposeHeaders: ['x-api-version'] }));
-app.use(noTrailingSlash());
+app.use(noTrailingSlash()); // eslint-disable-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call
 app.use(body());
-app.use(
-  log({
-    exclude: (ctx) => ctx.path.endsWith('healthcheck'),
-  })
-);
-app.use(json());
+app.use(accesslog()); // eslint-disable-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call
 
-app.use(async (ctx, next) => {
+app.use(async (ctx: koa.Context, next) => {
   try {
     const id_transaction = nanoid(10);
     ctx.set({ 'x-version': process.env.npm_package_version, 'x-transaction-id': id_transaction });
     const store = { id_transaction };
     await asyncStorage.run(store, next);
-  } catch (error) {
-    // if error was not properly handled do no leak the error to client but log the stacktrace
-    if (!error.http_code) {
-      console.error(error);
-      ctx.status = error.http_code || 500;
-      ctx.body = 'Internal server error.';
-    } else {
+  } catch (error: unknown) {
+    // if error was not handled return http info to the client
+    if (error instanceof HTTP_Error) {
       ctx.set({ 'Content-type': 'application/json; charset=utf-8' });
       ctx.status = error.http_code;
       ctx.body = error.message;
+    }
+    // otherwise do no leak info to the client but log the stacktrace
+    else {
+      console.error(error);
+      ctx.status = 500;
+      ctx.body = 'Internal server error.';
     }
   }
 });
@@ -46,6 +43,8 @@ app.use(router.allowedMethods());
 
 const server = http.createServer(app.callback());
 
-if (process.env.NODE_ENV !== 'test') server.listen(process.env.PORT, () => console.info(`Listening on port ${process.env.PORT}`));
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(process.env.PORT, () => console.info(`Listening on port ${process.env.PORT}`));
+}
 
 export default server;
