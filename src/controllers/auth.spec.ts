@@ -19,8 +19,7 @@ describe('auth', () => {
       password: 'password',
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    expect(response.body).toMatchObject({ token: expect.any(String) }); // NO WAY. any(classType: any): any;
+    expect(response.body).toMatchObject({ token: <string>expect.any(String) });
   });
 
   it.skip('/sign-in failure', async () => {
@@ -29,9 +28,9 @@ describe('auth', () => {
       password: 'blabla',
     });
 
-    expect(response.status).toEqual(401);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     expect(response.headers['x-transaction-id']).toEqual(expect.any(String)); // NO WAY. headers field is any in the type def.
+    expect(response.status).toEqual(401);
     expect(response.body).toEqual('Unauthorized.');
   });
 
@@ -50,7 +49,7 @@ describe('auth', () => {
 
 // describe('auth with mocked database', () => {
 //   it('/sign-up success', async () => {
-//     await mockModule('../models/user.ts', undefined, {
+//     await mockModule('../models/User.ts', undefined, {
 //       create: (args) => args,
 //     });
 //

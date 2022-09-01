@@ -1,8 +1,5 @@
 {
   "extends": [
     "eslint-config-xs/node-ts"
-  ],
-  "rules": {
-    "node/no-missing-import": "off"
-  }
+  ]
 }

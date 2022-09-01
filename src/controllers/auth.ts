@@ -1,6 +1,6 @@
 import jwt from 'jwt-simple';
 import { HTTP401, HTTP403, HTTP422 } from '../errors.js';
-import * as User from '../models/user.js';
+import User from '../models/user.js';
 
 export type signUp_fn = (input: signUp_input) => Promise<signUp_output>;
 
@@ -19,7 +19,7 @@ export const signUp: signUp_fn = async (input) => {
   if (!email.match(/^.+@.+\..+$/)) throw new HTTP422('Email must be a valid email address.');
   if (password.length < 8) throw new HTTP422('Password must be at least 8 characters long.');
 
-  const user = await User.create({ email, password });
+  const user = await User.insert({ email, password });
 
   const token = jwt.encode(user, process.env.JWT_SECRET);
   return { token };
@@ -60,3 +60,5 @@ export const me: me_fn = ({ token }) => {
     throw new HTTP403();
   }
 };
+
+export default { signIn, signUp, me };

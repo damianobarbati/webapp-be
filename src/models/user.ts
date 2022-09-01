@@ -1,21 +1,24 @@
 import crypto from 'crypto';
-import { database } from 'pg-database';
+import database from '../connectors/database.js';
+import User from '../types/User.js';
 
-export type create_fn = (input: create_input) => Promise<create_output>;
+export type insert_fn = (input: insert_input) => Promise<insert_output>;
 
-export type create_input = {
+export type insert_input = {
   email: string;
   password: string;
 };
 
-export type create_output = User;
+export type insert_output = User;
 
-export type User = {
-  id: number;
-};
-
-export const create: create_fn = async ({ email, password }) => {
+const insert: insert_fn = async ({ email, password }) => {
   const encrypted_password = crypto.createHash('sha256').update(password).digest('hex');
-  const user: User = (await database.insert('users', { email, password: encrypted_password })) as User;
+
+  const [user] = await database<User>('users')
+    .insert(<User>{ email, password: encrypted_password })
+    .returning('*');
+
   return user;
 };
+
+export default { insert };
