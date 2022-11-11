@@ -20,32 +20,32 @@
     "serve:production": "NODE_ENV=production node --experimental-specifier-resolution=node --loader ts-node/esm -r envk src/index.ts"
   },
   "dependencies": {
-    "@koa/cors": "^3.4.1",
+    "@koa/cors": "^4.0.0",
     "@koa/router": "^12.0.0",
-    "envk": "^3.2.1",
+    "envk": "^3.2.2",
     "jwt-simple": "^0.5.6",
     "knex": "^2.3.0",
     "koa": "^2.13.4",
     "koa-accesslog": "^1.0.0",
     "koa-better-log": "^1.0.5",
-    "koa-body": "^5.0.0",
+    "koa-body": "^6.0.1",
     "koa-no-trailing-slash": "^2.1.0",
     "nanoid": "4.0.0",
     "pg": "^8.8.0",
     "ts-node": "^10.9.1",
-    "typescript": "4.8.2"
+    "typescript": "4.8.4"
   },
   "devDependencies": {
-    "@types/jest": "^29.0.0",
-    "@types/koa-bodyparser": "^4.3.7",
+    "@types/jest": "^29.2.2",
+    "@types/koa-bodyparser": "^4.3.10",
     "@types/koa__cors": "^3.3.0",
-    "@types/koa__router": "^8.0.11",
-    "@types/node": "^18.7.14",
+    "@types/koa__router": "^12.0.0",
+    "@types/node": "^18.11.9",
     "@types/supertest": "^2.0.12",
-    "eslint-config-xs": "^1.4.3",
-    "jest": "^29.0.1",
-    "nodemon": "^2.0.19",
-    "supertest": "^6.2.4",
-    "ts-jest": "^28.0.8"
+    "eslint-config-xs": "^1.5.3",
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.1",
+    "ts-jest": "^29.0.3"
   }
 }
